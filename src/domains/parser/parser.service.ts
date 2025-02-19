@@ -78,7 +78,6 @@ export class ParserService {
 
     const pitlaneStartText = $('#pitlane_karts').text().trim();
     // const pitlane = pitlaneStartText.split(',');
-    // const pitlane = ['5', '3'];
     const pitlane = ['1', '13'];
 
     const laps = drivers
@@ -86,14 +85,15 @@ export class ParserService {
       .sort((a, b) => a.getAbsoluteStartTime() - b.getAbsoluteStartTime());
     for (const lap of laps) {
       // console.log(lap.driver.name, lap.driver.kart, lap.count, lap.time);
-      if (lap.time >= 50) {
+      if (lap.isPit()) {
+        console.log(`До питов: <- ${pitlane.join(', ')} (карт ${lap.driver.kart} ${lap.driver.name})`);
         const kart = lap.driver.kart;
-        console.log(kart, pitlane, lap.driver.name);
         lap.driver.kart = pitlane[0];
-        pitlane[0] = pitlane[1];
-        pitlane[1] = kart;
-        // lap.driver.kart = pitlane[0];
-        // pitlane[0] = kart;
+        for (let i = 0; i < pitlane.length - 1; i++) {
+          pitlane[i] = pitlane[i + 1];
+        }
+        pitlane[pitlane.length - 1] = kart;
+        console.log(`После питов: <- ${pitlane.join(', ')} (карт ${lap.driver.kart} ${lap.driver.name})`);
       }
     }
 
