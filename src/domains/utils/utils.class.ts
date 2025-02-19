@@ -1,3 +1,12 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { exec } = require('child_process');
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const sound = require('sound-play');
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const gtts = require('gtts');
+
 export class Utils {
   static timeFromText(timeText: string) {
     if (!timeText) {
@@ -38,5 +47,12 @@ export class Utils {
 
   static normalizeSeconds(seconds: number) {
     return seconds.toFixed(3);
+  }
+
+  static makeSound(text: string) {
+    const voice = new gtts(text, 'ru');
+    voice.save('voice.mp3', () =>
+      exec('afplay /Users/p.bulychev/Documents/Projects/Other/telegram-race-time/voice.mp3'),
+    );
   }
 }

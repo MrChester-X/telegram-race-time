@@ -2,7 +2,7 @@ import { Driver } from './driver.class';
 import { Utils } from '../utils/utils.class';
 
 export class DriverLap {
-  constructor(public driver: Driver, public count: number, public time: number) {}
+  constructor(public driver: Driver, public count: number, public time: number, public stintText?: string) {}
 
   getAbsoluteStartTime(): number {
     return this.driver.laps.slice(0, this.count).reduce((total, lap) => total + lap.time, 0);
@@ -19,5 +19,9 @@ export class DriverLap {
 
   toVideoText(): string {
     return `№${this.count + 1} ${Utils.timeToText(this.time)}`;
+  }
+
+  isPit(): boolean {
+    return this.time >= 45 && this.time <= 70;
   }
 }
