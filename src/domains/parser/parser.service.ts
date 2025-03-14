@@ -28,6 +28,27 @@ export class ParserService {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
 
+    const changes: { [id: string]: string } = {
+      '6': '3',
+      '10': '8',
+      '8': '14',
+      '4': '7',
+      '2': '2',
+      '12': '9',
+      '1': '13',
+      '9': '1',
+      '13': '12', // убрали
+      '14': '10',
+      '3': '4', // питы
+      '7': '6', // питы
+    };
+    const getRealKart = (kart: string) => {
+      if (kart in changes) {
+        return changes[kart];
+      }
+      return kart;
+    };
+
     const drivers: Driver[] = [];
     const matches: Driver[] = [];
     const kartNumbers: string[] = [];
@@ -37,11 +58,12 @@ export class ParserService {
       .each((index, element) => {
         if (index === 0) return;
         const kart = $(element).find('.kart').text().trim();
-        kartNumbers.push(kart);
+        kartNumbers.push(getRealKart(kart));
       });
     $('table thead tr:nth-child(2) th[scope="col"]').each((index, element) => {
       const name = $(element).text().trim();
       const driver = new Driver(index, name, kartNumbers[index]);
+      driver.karts.push(driver.kart);
       drivers.push(driver);
       if (reqName && name.toLowerCase().includes(reqName.toLowerCase())) {
         matches.push(driver);
@@ -78,7 +100,7 @@ export class ParserService {
 
     const pitlaneStartText = $('#pitlane_karts').text().trim();
     // const pitlane = pitlaneStartText.split(',');
-    const pitlane = ['1', '13'];
+    const pitlane = [getRealKart('7'), getRealKart('10')];
 
     const laps = drivers
       .reduce((acc, driver) => [...acc, ...driver.laps], [])
@@ -89,6 +111,7 @@ export class ParserService {
         console.log(`До питов: <- ${pitlane.join(', ')} (карт ${lap.driver.kart} ${lap.driver.name})`);
         const kart = lap.driver.kart;
         lap.driver.kart = pitlane[0];
+        lap.driver.karts.push(lap.driver.kart);
         for (let i = 0; i < pitlane.length - 1; i++) {
           pitlane[i] = pitlane[i + 1];
         }

@@ -3,6 +3,8 @@ import { DriverLap } from './driver-lap.class';
 export class Driver {
   constructor(public index: number, public name: string, public kart: string, public laps: DriverLap[] = []) {}
 
+  karts: string[] = [];
+
   addLap(driverLap: DriverLap) {
     this.laps.push(driverLap);
   }

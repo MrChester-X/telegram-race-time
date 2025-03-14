@@ -22,6 +22,6 @@ export class DriverLap {
   }
 
   isPit(): boolean {
-    return this.time >= 45 && this.time <= 70;
+    return this.time >= 50 && this.time <= 80;
   }
 }
