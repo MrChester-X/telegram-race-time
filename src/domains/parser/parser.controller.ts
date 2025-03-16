@@ -1,18 +1,22 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ParserService } from './parser.service';
+import { ParserGetRaceDto } from './dto/ParserGetRaceDto';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { RaceDto } from './dto/RaceDto';
 
+@ApiTags('Parser')
 @Controller('parser')
 export class ParserController {
   constructor(private readonly parserService: ParserService) {}
 
-  @Get()
-  async get(@Query('url') url: string, @Query('lastUrl') lastUrl?: string) {
-    const raceUrl = url.includes('heats/') ? url : await this.parserService.findUrl(url);
-    const raceObj = await this.parserService.parsePage(raceUrl);
+  @Get('race')
+  @ApiOperation({ summary: 'Parse race url' })
+  @ApiOkResponse({ type: RaceDto })
+  async get(@Query() dto: ParserGetRaceDto) {
+    const pitlane = dto.pitlane?.split(' ');
+    const raceUrl = dto.url.includes('heats/') ? dto.url : await this.parserService.findUrl(dto.url);
+    const raceObj = await this.parserService.parsePage(raceUrl, undefined, pitlane);
     const race = raceObj.race;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    race.drivers.forEach((driver) => driver.laps.forEach((lap) => (lap.driver = undefined)));
-    return race;
+    return race.toDto();
   }
 }

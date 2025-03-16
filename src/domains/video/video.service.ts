@@ -4,7 +4,6 @@ import axios from 'axios';
 import * as fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import * as ffmpeg from 'fluent-ffmpeg';
-import { loadESLint } from 'eslint';
 
 @Injectable()
 export class VideoService {
@@ -72,7 +71,7 @@ export class VideoService {
       method: 'GET',
       responseType: 'stream',
     });
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       const stream = fs.createWriteStream(filePath);
       response.data.pipe(stream);
       stream.on('finish', resolve);

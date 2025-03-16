@@ -1,5 +1,6 @@
 import { Driver } from './driver.class';
 import { Utils } from '../utils/utils.class';
+import { DriverLapDto } from './dto/DriverLapDto';
 
 export class DriverLap {
   constructor(public driver: Driver, public count: number, public time: number, public stintText?: string) {}
@@ -23,5 +24,13 @@ export class DriverLap {
 
   isPit(): boolean {
     return this.time >= 50 && this.time <= 80;
+  }
+
+  toDto(): DriverLapDto {
+    return {
+      count: this.count,
+      time: this.time,
+      stintText: this.stintText,
+    };
   }
 }

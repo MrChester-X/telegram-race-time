@@ -24,23 +24,23 @@ export class ParserService {
     return urls[0];
   }
 
-  async parsePage(url: string, reqName?: string) {
+  async parsePage(url: string, reqName?: string, pitlane: string[] = []) {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
 
     const changes: { [id: string]: string } = {
-      '6': '3',
-      '10': '8',
-      '8': '14',
-      '4': '7',
-      '2': '2',
-      '12': '9',
-      '1': '13',
-      '9': '1',
-      '13': '12', // убрали
-      '14': '10',
-      '3': '4', // питы
-      '7': '6', // питы
+      // '6': '3',
+      // '10': '8',
+      // '8': '14',
+      // '4': '7',
+      // '2': '2',
+      // '12': '9',
+      // '1': '13',
+      // '9': '1',
+      // '13': '12', // убрали
+      // '14': '10',
+      // '3': '4', // питы
+      // '7': '6', // питы
     };
     const getRealKart = (kart: string) => {
       if (kart in changes) {
@@ -98,9 +98,9 @@ export class ParserService {
         });
     });
 
-    const pitlaneStartText = $('#pitlane_karts').text().trim();
+    // const pitlaneStartText = $('#pitlane_karts').text().trim();
     // const pitlane = pitlaneStartText.split(',');
-    const pitlane = [getRealKart('7'), getRealKart('10')];
+    // const pitlane = [getRealKart('7'), getRealKart('10')];
 
     const laps = drivers
       .reduce((acc, driver) => [...acc, ...driver.laps], [])
