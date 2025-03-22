@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Driver } from '../parser/driver.class';
+import { Driver } from '../parser/classes/driver.class';
 import axios from 'axios';
 import * as fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';

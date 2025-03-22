@@ -2,7 +2,7 @@ import { Ctx, InjectBot, On, Start, Update } from 'nestjs-telegraf';
 import { Context, Telegraf } from 'telegraf';
 import { ParserService } from '../parser/parser.service';
 import { Utils } from '../utils/utils.class';
-import { DriverLap } from '../parser/driver-lap.class';
+import { DriverLap } from '../parser/classes/driver-lap.class';
 import { VideoService } from '../video/video.service';
 import * as fs from 'node:fs';
 import { S3Client } from '@aws-sdk/client-s3';

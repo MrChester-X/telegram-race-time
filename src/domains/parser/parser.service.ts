@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { Driver } from './driver.class';
-import { DriverLap } from './driver-lap.class';
+import { Driver } from './classes/driver.class';
+import { DriverLap } from './classes/driver-lap.class';
 import { Utils } from '../utils/utils.class';
-import { Race } from './race.class';
+import { Race } from './classes/race.class';
 
 @Injectable()
 export class ParserService {
@@ -102,6 +102,7 @@ export class ParserService {
     // const pitlane = pitlaneStartText.split(',');
     // const pitlane = [getRealKart('7'), getRealKart('10')];
 
+    const startPitlane = pitlane.slice();
     const laps = drivers
       .reduce((acc, driver) => [...acc, ...driver.laps], [])
       .sort((a, b) => a.getAbsoluteStartTime() - b.getAbsoluteStartTime());
@@ -120,7 +121,7 @@ export class ParserService {
       }
     }
 
-    const race = new Race([pitlane]);
+    const race = new Race([startPitlane]);
     drivers.forEach((driver) => race.addDriver(driver));
 
     return { race, driver };
